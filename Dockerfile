@@ -4,11 +4,10 @@ WORKDIR /go/src/git.sbruder.de/simon/alertmanager-gotify/
 
 COPY alertmanager-gotify.go .
 
-RUN apk add --no-cache git upx ca-certificates
+RUN apk add --no-cache git ca-certificates
 
 RUN go get -v \
-    && CGO_ENABLED=0 go build -v -ldflags="-s -w" \
-    && upx --ultra-brute alertmanager-gotify
+    && CGO_ENABLED=0 go build -v -ldflags="-s -w"
 
 FROM scratch
 
