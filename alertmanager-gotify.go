@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"strings"
+	"strconv"
 
 	"github.com/gotify/go-api-client/auth"
 	"github.com/gotify/go-api-client/client/message"
@@ -32,6 +33,7 @@ type Annotations struct {
 
 type Labels struct {
 	Severity string `json:severity`
+	Priority string `json:priority`
 }
 
 func main() {
@@ -77,11 +79,13 @@ func main() {
 			}
 
 			title.WriteString(alert.Annotations.Title)
+		        priority, _ := strconv.Atoi(alert.Labels.Priority)
 
 			params := message.NewCreateMessageParams()
 			params.Body = &models.MessageExternal{
 				Title:    title.String(),
 				Message:  alert.Annotations.Description,
+				Priority: priority,
 			}
 			_, err = client.Message.CreateMessage(params, auth.TokenAuth(applicationToken))
 
